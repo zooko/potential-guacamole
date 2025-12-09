@@ -40,6 +40,13 @@ commit:
 Date:   2025-12-09 12:48:38 +0000
 
 ---
+https://github.com/ch4r10t33r/b3js
+
+commit:
+
+Date: 2025-12-09 14:31:00 +0000
+
+---
 https://x.com/zooko/status/1998407780114567360
 
 "Whoa, whoa, it's only been 14 hours and there are already two submissions that look complete. So if you're looking at doing this for the Zcash, don't start because those other folks already beat you to it. (But you can still do it for love.)"
