@@ -2,7 +2,7 @@
 
 // test_blake3.js
 const fs = require('fs');
-const blake3 = require('./blake3.js');
+const blake3 = require('./blake3.ts');
 
 // Load official test vectors
 const testVectors = JSON.parse(fs.readFileSync('./test_vectors.json', 'utf8'));

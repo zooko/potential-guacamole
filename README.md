@@ -11,6 +11,9 @@ commit:
 
 Date:   2025-12-09 02:37:25 +0000
 
+supply-chain-attack risks: none
+tests: failed
+
 ---
 https://github.com/lamb356/blake3-optimized
 
@@ -18,12 +21,18 @@ Commit:
 
 Date:   2025-12-09 02:37:40 +0000
 
+supply-chain-attack risks: none
+tests: passed
+
 ---
 https://github.com/alrightCha/blake3-js
 
 commit:
 
 Date:   2025-12-09 05:55:34 +0000
+
+supply-chain-attack risks: none
+tests: passed
 
 ---
 https://github.com/Atamanov/blake3-fast
@@ -48,3 +57,6 @@ Date:   2025-12-09 15:01:00 +0000
 
 (Narrator voice: there were actually 6, judging by self-assigned timestamps in git commits.)
 
+---
+
+TODO: add checks for docs, tests, benchmarks
