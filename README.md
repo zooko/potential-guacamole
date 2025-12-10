@@ -41,6 +41,9 @@ commit:
 
 Date:   2025-12-09 10:20:02 +0000
 
+supply-chain-attack risks: optional dev dependencies but they are not required for build, and there are no runtime dependencies
+tests: passed
+
 ---
 https://github.com/chimmykk/Bk3JS
 
@@ -59,4 +62,4 @@ Date:   2025-12-09 15:01:00 +0000
 
 ---
 
-TODO: add checks for docs, tests, benchmarks
+TODO: add checks for packaging, docs, tests, benchmarks
