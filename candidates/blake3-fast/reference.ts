@@ -23,8 +23,8 @@ import {
   CHUNK_END,
   ROOT,
   PARENT,
-} from "./constants.js";
-import { rotr32, ctz64, wordsToBytes } from "./utils.js";
+} from "./constants.ts";
+import { rotr32, ctz64, wordsToBytes } from "./utils.ts";
 
 /**
  * G function: Quarter-round mixing

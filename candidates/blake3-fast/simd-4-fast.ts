@@ -41,8 +41,8 @@ import {
   CHUNK_END,
   ROOT,
   PARENT,
-} from "./constants.js";
-import { ctz64 } from "./utils.js";
+} from "./constants.ts";
+import { ctz64 } from "./utils.ts";
 
 // Detect SIMD support by validating a minimal WASM module with v128.const
 export const SIMD_SUPPORTED = (() => {

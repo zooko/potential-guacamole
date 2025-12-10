@@ -25,8 +25,8 @@ import {
   CHUNK_END,
   ROOT,
   PARENT,
-} from "./constants.js";
-import { ctz64 } from "./utils.js";
+} from "./constants.ts";
+import { ctz64 } from "./utils.ts";
 
 // Reuse these buffers to avoid garbage collection churn
 const STATE = new Uint32Array(16);

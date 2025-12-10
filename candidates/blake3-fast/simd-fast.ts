@@ -57,8 +57,8 @@ import {
   CHUNK_END,
   ROOT,
   PARENT,
-} from "./constants.js";
-import { ctz64 } from "./utils.js";
+} from "./constants.ts";
+import { ctz64 } from "./utils.ts";
 
 // Feature detection: check if this runtime supports WASM SIMD by validating
 // a minimal module that uses v128.const. If this fails, we fall back to JS.

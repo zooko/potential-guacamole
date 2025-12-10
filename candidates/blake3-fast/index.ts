@@ -25,19 +25,19 @@
  * Based on the official design: https://github.com/BLAKE3-team/BLAKE3
  */
 
-import { hash as referenceHash } from "./reference.js";
+import { hash as referenceHash } from "./reference.ts";
 import {
   hash as optimizedHash,
   compress as optimizedCompress,
-} from "./optimized.js";
-import { hash as simdHash, SIMD_SUPPORTED } from "./simd.js";
-import { hash as fastSimdHash, FAST_SIMD_SUPPORTED } from "./simd-fast.js";
+} from "./optimized.ts";
+import { hash as simdHash, SIMD_SUPPORTED } from "./simd.ts";
+import { hash as fastSimdHash, FAST_SIMD_SUPPORTED } from "./simd-fast.ts";
 import {
   hash as fast4SimdHash,
   hashFast as ultraSimdHash,
   hashHyper as hyperSimdHash,
   FAST_4_SIMD_SUPPORTED,
-} from "./simd-4-fast.js";
+} from "./simd-4-fast.ts";
 import {
   IV,
   BLOCK_LEN,
@@ -51,8 +51,8 @@ import {
   KEYED_HASH,
   DERIVE_KEY_CONTEXT,
   DERIVE_KEY_MATERIAL,
-} from "./constants.js";
-import { ctz64 } from "./utils.js";
+} from "./constants.ts";
+import { ctz64 } from "./utils.ts";
 
 // Re-export constants
 export {

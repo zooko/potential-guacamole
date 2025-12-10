@@ -24,9 +24,9 @@ import {
   CHUNK_END,
   ROOT,
   PARENT,
-} from "./constants.js";
-import { ctz64 } from "./utils.js";
-import { compress as jsCompress } from "./optimized.js";
+} from "./constants.ts";
+import { ctz64 } from "./utils.ts";
+import { compress as jsCompress } from "./optimized.ts";
 
 // WASM SIMD feature detection
 export const SIMD_SUPPORTED = (() => {
