@@ -1,8 +1,7 @@
 // Thanks to Claude (Opus 4.5) for writing this file.
 
-// test_blake3.js
-const fs = require('fs');
-const blake3 = require('./index.ts');
+import { hash } from './Bk3JS/blake3.js';
+import fs from 'fs';
 
 // Load official test vectors
 const testVectors = JSON.parse(fs.readFileSync('./test_vectors.json', 'utf8'));
@@ -28,7 +27,7 @@ for (const testCase of testVectors.cases) {
   const input = generateInput(testCase.input_len);
 
   // Test standard hash (first 32 bytes)
-  const digest = blake3.hash(input);
+  const digest = hash(input);
   const expected = testCase.hash.slice(0, 64); // First 32 bytes = 64 hex chars
   const actual = toHex(digest);
 

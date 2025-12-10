@@ -51,6 +51,9 @@ commit:
 
 Date:   2025-12-09 12:48:38 +0000
 
+supply-chain-attack risks: none
+tests: passed
+
 ---
 https://x.com/zooko/status/1998407780114567360
 
@@ -61,5 +64,7 @@ Date:   2025-12-09 15:01:00 +0000
 (Narrator voice: there were actually 6, judging by self-assigned timestamps in git commits.)
 
 ---
+
+DONE: check each submission for matching the official BLAKE3 test vectors
 
 TODO: add checks for packaging, docs, tests, benchmarks
