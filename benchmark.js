@@ -1,29 +1,25 @@
-/**
- * BLAKE3 Benchmark Suite
- */
-
-import { blake3 } from './index.js';
+import { hash } from './wca_sha256.js';
 import fs from 'fs';
 
-console.log('BLAKE3 Optimized - Benchmark Suite');
-console.log('===================================\n');
+console.log('BLAKE3/SHA-256 - Benchmark Suite');
+console.log('================================');
 
 // Warmup
 console.log('Warming up...');
 for (let i = 0; i < 1000; i++) {
-  blake3(new Uint8Array(1024));
+  await hash(new Uint8Array(1024));
 }
 
 // Benchmark function
-function benchmark(name, data, iterations) {
+async function benchmark(name, data, iterations) {
   const start = performance.now();
   for (let i = 0; i < iterations; i++) {
-    blake3(data);
+    await hash(data);
   }
   const elapsed = performance.now() - start;
   const throughput = (data.length * iterations / 1024 / 1024) / (elapsed / 1000);
   const opsPerSec = (iterations / elapsed) * 1000;
-  
+
   console.log(`${name.padEnd(20)} ${throughput.toFixed(2).padStart(8)} MB/s  ${opsPerSec.toFixed(0).padStart(10)} ops/sec`);
   return throughput;
 }
@@ -45,12 +41,7 @@ const sizes = [
 for (const [name, size, iterations] of sizes) {
   const data = new Uint8Array(size);
   for (let i = 0; i < size; i++) data[i] = i & 0xff;
-  benchmark(name, data, iterations);
+  await benchmark(name, data, iterations);
 }
 
-// Compare with reference if available
 console.log('\n' + '─'.repeat(50));
-console.log('Comparison Notes:');
-console.log('- Fleek reports ~435 MB/s pure JS on Apple M1 Max');
-console.log('- This is the same optimization level as Steps 1-8');
-console.log('- WASM SIMD would add another ~1.4x speedup');

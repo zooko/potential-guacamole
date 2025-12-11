@@ -1,0 +1,16 @@
+BLAKE3/SHA-256 - Benchmark Suite
+================================
+Warming up...
+
+Throughput Benchmark:
+──────────────────────────────────────────────────
+64 bytes                 7.40 MB/s      121302 ops/sec
+256 bytes               29.98 MB/s      122799 ops/sec
+1 KB                   115.00 MB/s      117755 ops/sec
+4 KB                   424.92 MB/s      108779 ops/sec
+16 KB                 1119.10 MB/s       71622 ops/sec
+64 KB                 1852.80 MB/s       29645 ops/sec
+256 KB                2694.93 MB/s       10780 ops/sec
+1 MB                  2968.78 MB/s        2969 ops/sec
+
+──────────────────────────────────────────────────
