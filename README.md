@@ -1,4 +1,17 @@
-benchmarks (see files named "bench-w-blake3-optimized.output.txt" in the various subdirs).
+
+--- after-the-bounty followups:
+
+This looks good: https://github.com/Brooooooklyn/blake3-jit
+
+These bounty competitors seem to have added substantial improvements after the competition ended: https://github.com/lamb356/blake3-optimized
+
+New implementation after the contest: https://github.com/HuntsmanADHD/Blake3-JavaScript
+
+
+
+--- bountry benchmarks
+
+(see files named "bench-w-blake3-optimized.output.txt" in the various subdirs)
 
 These were all run on an Apple M4 Max CPU with Macos 26.1.
 
@@ -75,6 +88,8 @@ one file
 ---
 https://github.com/lamb356/blake3-optimized
 
+sent bounty
+
 Commit:
 
 Date:   2025-12-09 02:37:40 +0000
@@ -97,6 +112,8 @@ benchmarks
 ---
 https://github.com/alrightCha/blake3-js
 
+sent bounty
+
 commit:
 
 Date:   2025-12-09 05:55:34 +0000
@@ -118,6 +135,10 @@ benchmarks
 ---
 https://github.com/Atamanov/blake3-fast
 
+sent bounty
+
+author: Alexander Atamanov
+
 commit:
 
 Date:   2025-12-09 10:20:02 +0000
@@ -138,6 +159,10 @@ benchmarks
 
 ---
 https://github.com/chimmykk/Bk3JS
+
+sent bounty
+
+author: Rilsosing Koireng
 
 commit:
 
