@@ -1,0 +1,85 @@
+CMAKE_TOOLCHAIN_FILE_aarch64-apple-darwin = None
+CMAKE_TOOLCHAIN_FILE_aarch64_apple_darwin = None
+HOST_CMAKE_TOOLCHAIN_FILE = None
+CMAKE_TOOLCHAIN_FILE = None
+CMAKE_GENERATOR_aarch64-apple-darwin = None
+CMAKE_GENERATOR_aarch64_apple_darwin = None
+HOST_CMAKE_GENERATOR = None
+CMAKE_GENERATOR = None
+CMAKE_PREFIX_PATH_aarch64-apple-darwin = None
+CMAKE_PREFIX_PATH_aarch64_apple_darwin = None
+HOST_CMAKE_PREFIX_PATH = None
+CMAKE_PREFIX_PATH = None
+CMAKE_aarch64-apple-darwin = None
+CMAKE_aarch64_apple_darwin = None
+HOST_CMAKE = None
+CMAKE = None
+running: cd "/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build" && CMAKE_PREFIX_PATH="" LC_ALL="C" "cmake" "/Users/donaldturnworth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libmimalloc-sys2-0.1.51/c_src/mimalloc" "-DCMAKE_OSX_ARCHITECTURES=arm64" "-DMI_BUILD_STATIC=ON" "-DMI_BUILD_OBJECT=OFF" "-DMI_BUILD_SHARED=OFF" "-DMI_BUILD_TESTS=OFF" "-DMI_OVERRIDE=OFF" "-DMI_DEBUG_FULL=OFF" "-DCMAKE_INSTALL_PREFIX=/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out" "-DCMAKE_C_FLAGS= -ffunction-sections -fdata-sections -fPIC --target=arm64-apple-macosx -mmacosx-version-min=15.5" "-DCMAKE_C_COMPILER=/usr/bin/cc" "-DCMAKE_CXX_FLAGS= -ffunction-sections -fdata-sections -fPIC --target=arm64-apple-macosx -mmacosx-version-min=15.5" "-DCMAKE_CXX_COMPILER=/usr/bin/c++" "-DCMAKE_ASM_FLAGS= -ffunction-sections -fdata-sections -fPIC --target=arm64-apple-macosx -mmacosx-version-min=15.5" "-DCMAKE_ASM_COMPILER=/usr/bin/cc" "-DCMAKE_BUILD_TYPE=Release"
+-- The C compiler identification is AppleClang 17.0.0.17000013
+-- The CXX compiler identification is AppleClang 17.0.0.17000013
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- 
+-- Architecture: arm64
+-- Architecture specific optimization is enabled (with -Xarch_arm64;-march=armv8.1-a) (MI_OPT_ARCH=ON)
+-- Performing Test mi_has_libpthread
+-- Performing Test mi_has_libpthread - Success
+-- Performing Test mi_has_librt
+-- Performing Test mi_has_librt - Failed
+-- Performing Test mi_has_libatomic
+-- Performing Test mi_has_libatomic - Failed
+-- 
+-- Library name     : mimalloc
+-- Version          : 2.2.4
+-- Build type       : release
+-- C Compiler       : /usr/bin/cc
+-- Compiler flags   : -Wall;-Wextra;-Wpedantic;-Wno-unknown-pragmas;-fvisibility=hidden;-Wstrict-prototypes;-Wno-static-in-inline;-ftls-model=initial-exec;-Xarch_arm64;-march=armv8.1-a
+-- Compiler defines : MI_CMAKE_BUILD_TYPE=release;MI_BUILD_RELEASE
+-- Link libraries   : pthread
+-- Build targets    : static
+-- 
+-- Configuring done (0.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build
+running: cd "/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build" && LC_ALL="C" "cmake" "--build" "/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build" "--target" "install" "--config" "Release" "--parallel" "16"
+[ 11%] Building C object CMakeFiles/mimalloc-static.dir/src/alloc-aligned.c.o
+[ 11%] Building C object CMakeFiles/mimalloc-static.dir/src/arena.c.o
+[ 17%] Building C object CMakeFiles/mimalloc-static.dir/src/init.c.o
+[ 29%] Building C object CMakeFiles/mimalloc-static.dir/src/alloc.c.o
+[ 29%] Building C object CMakeFiles/mimalloc-static.dir/src/alloc-posix.c.o
+[ 41%] Building C object CMakeFiles/mimalloc-static.dir/src/bitmap.c.o
+[ 41%] Building C object CMakeFiles/mimalloc-static.dir/src/libc.c.o
+[ 47%] Building C object CMakeFiles/mimalloc-static.dir/src/options.c.o
+[ 52%] Building C object CMakeFiles/mimalloc-static.dir/src/heap.c.o
+[ 58%] Building C object CMakeFiles/mimalloc-static.dir/src/stats.c.o
+[ 64%] Building C object CMakeFiles/mimalloc-static.dir/src/random.c.o
+[ 70%] Building C object CMakeFiles/mimalloc-static.dir/src/prim/prim.c.o
+[ 82%] Building C object CMakeFiles/mimalloc-static.dir/src/page.c.o
+[ 82%] Building C object CMakeFiles/mimalloc-static.dir/src/segment-map.c.o
+[ 88%] Building C object CMakeFiles/mimalloc-static.dir/src/os.c.o
+[ 94%] Building C object CMakeFiles/mimalloc-static.dir/src/segment.c.o
+[100%] Linking C static library libmimalloc.a
+[100%] Built target mimalloc-static
+Install the project...
+-- Install configuration: "Release"
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/mimalloc-2.2/libmimalloc.a
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc.cmake
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc-release.cmake
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc.h
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc-override.h
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc-new-delete.h
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc-stats.h
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc-config.cmake
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc-config-version.cmake
+-- Installing: /Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/pkgconfig/mimalloc.pc
+cargo:root=/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out
+cargo:rustc-link-search=native=/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build
+cargo:rustc-link-lib=static=mimalloc

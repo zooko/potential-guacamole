@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

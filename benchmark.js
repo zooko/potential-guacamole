@@ -2,7 +2,7 @@
  * BLAKE3 Benchmark Suite
  */
 
-import { hash } from './blake3.js';
+import { blake3 } from './index.js';
 import fs from 'fs';
 
 console.log('BLAKE3 Optimized - Benchmark Suite');
@@ -11,14 +11,14 @@ console.log('===================================\n');
 // Warmup
 console.log('Warming up...');
 for (let i = 0; i < 1000; i++) {
-  hash(new Uint8Array(1024));
+  blake3(new Uint8Array(1024));
 }
 
 // Benchmark function
 function benchmark(name, data, iterations) {
   const start = performance.now();
   for (let i = 0; i < iterations; i++) {
-    hash(data);
+    blake3(data);
   }
   const elapsed = performance.now() - start;
   const throughput = (data.length * iterations / 1024 / 1024) / (elapsed / 1000);

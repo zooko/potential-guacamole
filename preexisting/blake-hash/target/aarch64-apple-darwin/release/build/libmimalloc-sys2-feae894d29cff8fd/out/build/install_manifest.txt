@@ -1,0 +1,10 @@
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/mimalloc-2.2/libmimalloc.a
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc.cmake
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc-release.cmake
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc.h
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc-override.h
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc-new-delete.h
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/include/mimalloc-2.2/mimalloc-stats.h
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc-config.cmake
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/cmake/mimalloc-2.2/mimalloc-config-version.cmake
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/lib/pkgconfig/mimalloc.pc

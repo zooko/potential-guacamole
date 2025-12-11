@@ -1,0 +1,30 @@
+[package]
+edition = "2021"
+name = "blake_hash_napi"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+base64 = "0.22"
+blake2b_simd = "1.0"
+blake2s_simd = "1.0"
+blake3 = "1"
+hex = "0.4"
+napi = "3"
+napi-derive = "3"
+ryu = "1"
+
+[target.'cfg(all(not(target_os = "linux"), not(target_family = "wasm")))'.dependencies]
+mimalloc-safe = { version = "0.1" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+mimalloc-safe = { version = "0.1", features = ["local_dynamic_tls"] }
+
+[build-dependencies]
+napi-build = "2"
+
+[profile.release]
+codegen-units = 1
+lto = true

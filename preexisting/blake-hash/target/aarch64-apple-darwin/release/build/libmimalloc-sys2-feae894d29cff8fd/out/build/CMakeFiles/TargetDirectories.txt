@@ -1,0 +1,7 @@
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/CMakeFiles/mimalloc-static.dir
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/CMakeFiles/edit_cache.dir
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/CMakeFiles/rebuild_cache.dir
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/CMakeFiles/list_install_components.dir
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/CMakeFiles/install.dir
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/CMakeFiles/install/local.dir
+/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out/build/CMakeFiles/install/strip.dir

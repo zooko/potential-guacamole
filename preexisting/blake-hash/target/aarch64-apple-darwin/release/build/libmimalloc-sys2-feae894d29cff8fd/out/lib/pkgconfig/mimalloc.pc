@@ -1,0 +1,11 @@
+prefix=/Users/donaldturnworth/playground/b3js-zoo/blake-hash/target/aarch64-apple-darwin/release/build/libmimalloc-sys2-feae894d29cff8fd/out
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libmimalloc
+Description: A compact general purpose allocator with excellent performance
+Version: 2.2
+URL: https://github.com/microsoft/mimalloc/
+Libs: -L${libdir} -lmimalloc
+Libs.private:  -lpthread
+Cflags: -I${includedir}

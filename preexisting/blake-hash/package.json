@@ -1,0 +1,90 @@
+{
+  "name": "@napi-rs/blake-hash",
+  "version": "1.3.5",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "napi": {
+    "binaryName": "blake",
+    "targets": [
+      "x86_64-apple-darwin",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "aarch64-apple-darwin",
+      "aarch64-linux-android",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-unknown-linux-musl",
+      "aarch64-pc-windows-msvc",
+      "armv7-unknown-linux-gnueabihf",
+      "x86_64-unknown-linux-musl",
+      "x86_64-unknown-freebsd",
+      "i686-pc-windows-msvc",
+      "powerpc64le-unknown-linux-gnu",
+      "s390x-unknown-linux-gnu"
+    ]
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@napi-rs/cli": "^3.0.0",
+    "@node-rs/deno-lint": "^1.20.4",
+    "@node-rs/xxhash": "^1.7.6",
+    "@oxc-node/core": "^0.0.35",
+    "@types/node": "^24.0.14",
+    "ava": "^6.4.1",
+    "benny": "^3.7.1",
+    "blake2": "^5.0.0",
+    "blake3": "^3.0.0",
+    "esbuild": "^0.27.0",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "ava": {
+    "nodeArguments": [
+      "--import",
+      "@oxc-node/core/register"
+    ],
+    "extensions": {
+      "ts": "module"
+    },
+    "workerThreads": false,
+    "timeout": "2m",
+    "files": [
+      "__test__/**/*.spec.ts"
+    ]
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "lint": "denolint .",
+    "prepublishOnly": "napi prepublish -t npm && esbuild --minify --outfile=index.js --allow-overwrite index.js",
+    "version": "napi version",
+    "test": "ava"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Brooooooklyn"
+  },
+  "repository": {
+    "url": "git+ssh://git@github.com/Brooooooklyn/blake-hash.git",
+    "type": "git"
+  },
+  "packageManager": "yarn@4.12.0",
+  "resolutions": {
+    "blake3-wasm@npm:2.1.7": "^3.0.0",
+    "@c4312/blake3-native@npm:2.1.7": "^3.0.0",
+    "@c4312/blake3-internal@npm:2.1.7": "^3.0.0"
+  }
+}
