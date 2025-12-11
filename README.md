@@ -74,114 +74,45 @@ benchmarks (see files named "bench-w-blake3-optimized.output.txt" in the various
 
 These were all run on an Apple M4 Max CPU with Macos 26.1.
 
-Pre-existing implementation of SHA256 (for comparison):
-
-WebCryptoAPI SHA256 (doesn't implement BLAKE3, native implementation):
-
+text
 ```
-64 bytes                 7.13 MB/s
-256 bytes               28.85 MB/s
-1 KB                   117.10 MB/s
-4 KB                   425.12 MB/s
-16 KB                 1113.45 MB/s
-64 KB                 1851.31 MB/s
-256 KB                2699.12 MB/s
-1 MB                  2970.62 MB/s
-```
+pre-existing:
 
-All the rest below here are BLAKE3.
+wc sha256: WebCrypto API implementation of SHA256 (native code)
+blake-has: node bindings around native BLAKE3
+hash-wasm: wasm implementation of BLAKE3
 
-Pre-existing implementations of BLAKE3 (for comparison):
+Vals are throughput in MB/s. Higher is better.
 
-blake-hash node bindings to native BLAKE3 implementation (https://github.com/Brooooooklyn/blake-hash):
+           pre-existing                  candidates
+           ------------                  ---------->
+           
+           sha256    blake3
+           ------    ------>
 
-```
-64 bytes               116.73 MB/s
-256 bytes              410.47 MB/s
-1 KB                   874.63 MB/s
-4 KB                  1945.17 MB/s
-16 KB                 2336.96 MB/s
-64 KB                 2455.62 MB/s
-256 KB                2493.90 MB/s
-1 MB                  2505.65 MB/s
-```
+           native              js/wasm
+           ------>             ------->
 
-hash-wasm implementation of BLAKE3 (https://github.com/Daninet/hash-wasm):
+input size wc sha256 blake-has hash-wasm Blake3inJ   Bk3JS   blake3-fa blake3-js blake3-op
+---------- --------- --------- --------- --------- --------- --------- --------- ---------
+64 bytes         7       116       149        56       196       209       251 *     213
+256 bytes       28       410       500        93       605 *     413       617 *     605 *
+1 KB           117       874       897 *     114       883 *     528       890 *     874 *
+4 KB           425      1940      1090       116       940      1270 *     949       935
+16 KB         1110      2330      1140       114      1320      1560 *     984       961
+64 KB         1850      2450      1170       114      1540 *    1540 *     987       952
+256 KB        2690      2490      1170       114      1580 *    1560 *     971       945
+1 MB          2970      2500      1170       113      1510 *    1560 *     960       957
 
-```
-64 bytes               149.51 MB/s
-256 bytes              500.73 MB/s
-1 KB                   897.75 MB/s
-4 KB                  1096.10 MB/s
-16 KB                 1148.57 MB/s
-64 KB                 1171.03 MB/s
-256 KB                1170.80 MB/s
-1 MB                  1172.33 MB/s
+`*` marks the fastest one, as well as any others within 10% of the fastest one
 ```
 
-Candidate new implementations of BLAKE3:
+Comments:
 
-Blake3inJavasScript:
+This is interesting -- there are no fewer than three candidates that are the fastest at at least one
+size input, but there are no candidates that are the fastest, or even within 10% of the fastest, at
+all input sizes.
 
-```
-64 bytes                56.41 MB/s
-256 bytes               93.79 MB/s
-1 KB                   114.52 MB/s
-4 KB                   116.07 MB/s
-16 KB                  114.54 MB/s
-64 KB                  114.95 MB/s
-256 KB                 114.46 MB/s
-1 MB                   113.60 MB/s
-```
-
-Bk3JS:
-
-```
-64 bytes               196.31 MB/s
-256 bytes              605.74 MB/s
-1 KB                   883.49 MB/s
-4 KB                   940.26 MB/s
-16 KB                 1326.95 MB/s
-64 KB                 1540.94 MB/s
-256 KB                1581.21 MB/s
-1 MB                  1519.38 MB/s
-```
-
-blake3-fast:
-
-```
-64 bytes               209.28 MB/s
-256 bytes              413.29 MB/s
-1 KB                   528.66 MB/s
-4 KB                  1277.22 MB/s
-16 KB                 1562.90 MB/s
-64 KB                 1544.95 MB/s
-256 KB                1561.00 MB/s
-1 MB                  1562.83 MB/s
-```
-
-blake3-js:
-
-```
-64 bytes               251.96 MB/s
-256 bytes              617.32 MB/s
-1 KB                   890.65 MB/s
-4 KB                   949.16 MB/s
-16 KB                  984.10 MB/s
-64 KB                  987.81 MB/s
-256 KB                 971.45 MB/s
-1 MB                   960.73 MB/s
-```
-
-blake3-optimized:
-
-```
-64 bytes               213.17 MB/s
-256 bytes              605.12 MB/s
-1 KB                   874.28 MB/s
-4 KB                   935.69 MB/s
-16 KB                  961.98 MB/s
-64 KB                  952.33 MB/s
-256 KB                 945.63 MB/s
-1 MB                   957.84 MB/s
-```
+Also: it seems like a multithreaded implementation ought to achieve about 4X the throughput for each
+4X increase in the input size (starting with the 1 KB input size since that is the size of a BLAKE3
+Merkle Tree leaf).
