@@ -1,4 +1,4 @@
-import { hash } from './wca_sha256.js';
+import { hash } from './blake3.js';
 import fs from 'fs';
 
 console.log('BLAKE3/SHA-256 - Benchmarks');

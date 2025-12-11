@@ -1,21 +1,19 @@
-BLAKE3 Optimized - Benchmark Suite
-===================================
-
+BLAKE3/SHA-256 - Benchmarks
+===========================
 Warming up...
 
 Throughput Benchmark:
 ──────────────────────────────────────────────────
-64 bytes               257.29 MB/s     4215370 ops/sec
-256 bytes              673.72 MB/s     2759553 ops/sec
-1 KB                   942.31 MB/s      964921 ops/sec
-4 KB                   971.53 MB/s      248712 ops/sec
-16 KB                  985.21 MB/s       63054 ops/sec
-64 KB                  988.35 MB/s       15814 ops/sec
-256 KB                 964.39 MB/s        3858 ops/sec
-1 MB                   973.31 MB/s         973 ops/sec
+64 bytes               213.17 MB/s
+256 bytes              605.12 MB/s
+1 KB                   874.28 MB/s
+4 KB                   935.69 MB/s
+16 KB                  961.98 MB/s
+64 KB                  952.33 MB/s
+256 KB                 945.63 MB/s
+1 MB                   957.84 MB/s
+10 MB                  943.09 MB/s
+100 MB                 930.21 MB/s
+1000 MB                923.87 MB/s
 
 ──────────────────────────────────────────────────
-Comparison Notes:
-- Fleek reports ~435 MB/s pure JS on Apple M1 Max
-- This is the same optimization level as Steps 1-8
-- WASM SIMD would add another ~1.4x speedup
