@@ -1,4 +1,4 @@
-import { hash } from './wca_sha256.js';
+import { blake3 } from 'hash-wasm';
 import fs from 'fs';
 
 console.log('BLAKE3/SHA-256 - Benchmark Suite');
@@ -7,14 +7,14 @@ console.log('================================');
 // Warmup
 console.log('Warming up...');
 for (let i = 0; i < 1000; i++) {
-  await hash(new Uint8Array(1024));
+  await blake3(new Uint8Array(1024));
 }
 
 // Benchmark function
 async function benchmark(name, data, iterations) {
   const start = performance.now();
   for (let i = 0; i < iterations; i++) {
-    await hash(data);
+    await blake3(data);
   }
   const elapsed = performance.now() - start;
   const throughput = (data.length * iterations / 1024 / 1024) / (elapsed / 1000);
