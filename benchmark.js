@@ -1,4 +1,4 @@
-import { hash } from './blake3.ts';
+import { hash } from './blake3.js';
 import fs from 'fs';
 
 console.log('BLAKE3/SHA-256 - Benchmarks');
