@@ -78,90 +78,114 @@ Pre-existing implementations of BLAKE3 and SHA256 (for comparison):
 
 WebCryptoAPI SHA256 (doesn't implement BLAKE3, native implementation):
 
-64 bytes                 7.40 MB/s      121302 ops/sec
-256 bytes               29.98 MB/s      122799 ops/sec
-1 KB                   115.00 MB/s      117755 ops/sec
-4 KB                   424.92 MB/s      108779 ops/sec
-16 KB                 1119.10 MB/s       71622 ops/sec
-64 KB                 1852.80 MB/s       29645 ops/sec
-256 KB                2694.93 MB/s       10780 ops/sec
-1 MB                  2968.78 MB/s        2969 ops/sec
+64 bytes                 7.13 MB/s
+256 bytes               28.85 MB/s
+1 KB                   117.10 MB/s
+4 KB                   425.12 MB/s
+16 KB                 1113.45 MB/s
+64 KB                 1851.31 MB/s
+256 KB                2699.12 MB/s
+1 MB                  2970.62 MB/s
+10 MB                 3048.86 MB/s
+100 MB                2683.79 MB/s
+1000 MB               2695.03 MB/s
 
-All the rest below are BLAKE3.
+All the rest below here are BLAKE3.
 
 blake-hash node bindings to native BLAKE3 implementation (https://github.com/Brooooooklyn/blake-hash):
 
-64 bytes               138.27 MB/s     2265363 ops/sec
-256 bytes              486.71 MB/s     1993548 ops/sec
-1 KB                   954.18 MB/s      977075 ops/sec
-4 KB                  2028.40 MB/s      519269 ops/sec
-16 KB                 2364.51 MB/s      151329 ops/sec
-64 KB                 2459.82 MB/s       39357 ops/sec
-256 KB                2494.85 MB/s        9979 ops/sec
-1 MB                  2506.37 MB/s        2506 ops/sec
+64 bytes               116.73 MB/s
+256 bytes              410.47 MB/s
+1 KB                   874.63 MB/s
+4 KB                  1945.17 MB/s
+16 KB                 2336.96 MB/s
+64 KB                 2455.62 MB/s
+256 KB                2493.90 MB/s
+1 MB                  2505.65 MB/s
+10 MB                 2508.84 MB/s
+100 MB                2481.55 MB/s
+1000 MB               2410.96 MB/s
 
 hash-wasm (https://github.com/Daninet/hash-wasm):
 
-64 bytes               154.24 MB/s     2527122 ops/sec
-256 bytes              495.94 MB/s     2031357 ops/sec
-1 KB                   896.43 MB/s      917949 ops/sec
-4 KB                  1092.28 MB/s      279623 ops/sec
-16 KB                 1148.97 MB/s       73534 ops/sec
-64 KB                 1170.10 MB/s       18722 ops/sec
-256 KB                1160.37 MB/s        4641 ops/sec
-1 MB                  1145.71 MB/s        1146 ops/sec
+64 bytes               149.51 MB/s
+256 bytes              500.73 MB/s
+1 KB                   897.75 MB/s
+4 KB                  1096.10 MB/s
+16 KB                 1148.57 MB/s
+64 KB                 1171.03 MB/s
+256 KB                1170.80 MB/s
+1 MB                  1172.33 MB/s
+10 MB                 1172.33 MB/s
+100 MB                1168.81 MB/s
+1000 MB               1130.20 MB/s
 
 Blake3inJavasScript:
 
-64 bytes                61.11 MB/s     1001153 ops/sec
-256 bytes              101.59 MB/s      416104 ops/sec
-1 KB                   120.26 MB/s      123143 ops/sec
-4 KB                   120.48 MB/s       30844 ops/sec
-16 KB                  120.20 MB/s        7693 ops/sec
-64 KB                  120.12 MB/s        1922 ops/sec
-256 KB                 120.65 MB/s         483 ops/sec
-1 MB                   120.01 MB/s         120 ops/sec
+64 bytes                56.41 MB/s
+256 bytes               93.79 MB/s
+1 KB                   114.52 MB/s
+4 KB                   116.07 MB/s
+16 KB                  114.54 MB/s
+64 KB                  114.95 MB/s
+256 KB                 114.46 MB/s
+1 MB                   113.60 MB/s
+10 MB                  113.03 MB/s
+100 MB                 112.92 MB/s
+1000 MB                113.11 MB/s
 
 Bk3JS:
 
-64 bytes               255.99 MB/s     4194176 ops/sec
-256 bytes              680.12 MB/s     2785755 ops/sec
-1 KB                   962.04 MB/s      985131 ops/sec
-4 KB                   991.04 MB/s      253706 ops/sec
-16 KB                 1303.38 MB/s       83416 ops/sec
-64 KB                 1507.61 MB/s       24122 ops/sec
-256 KB                1570.26 MB/s        6281 ops/sec
-1 MB                  1464.30 MB/s        1464 ops/sec
+64 bytes               196.31 MB/s
+256 bytes              605.74 MB/s
+1 KB                   883.49 MB/s
+4 KB                   940.26 MB/s
+16 KB                 1326.95 MB/s
+64 KB                 1540.94 MB/s
+256 KB                1581.21 MB/s
+1 MB                  1519.38 MB/s
+10 MB                 1400.97 MB/s
+100 MB                1546.70 MB/s
+1000 MB               1498.92 MB/s
 
 blake3-fast:
 
-64 bytes               252.97 MB/s     4144584 ops/sec
-256 bytes              457.73 MB/s     1874862 ops/sec
-1 KB                   544.04 MB/s      557093 ops/sec
-4 KB                  1281.35 MB/s      328026 ops/sec
-16 KB                 1561.79 MB/s       99954 ops/sec
-64 KB                 1541.74 MB/s       24668 ops/sec
-256 KB                1543.03 MB/s        6172 ops/sec
-1 MB                  1555.25 MB/s        1555 ops/sec
+64 bytes               209.28 MB/s
+256 bytes              413.29 MB/s
+1 KB                   528.66 MB/s
+4 KB                  1277.22 MB/s
+16 KB                 1562.90 MB/s
+64 KB                 1544.95 MB/s
+256 KB                1561.00 MB/s
+1 MB                  1562.83 MB/s
+10 MB                 1565.35 MB/s
+100 MB                1508.69 MB/s
+1000 MB               1528.87 MB/s
 
 blake3-js:
 
-64 bytes               317.39 MB/s     5200039 ops/sec
-256 bytes              710.66 MB/s     2910862 ops/sec
-1 KB                   958.34 MB/s      981342 ops/sec
-4 KB                   988.18 MB/s      252975 ops/sec
-16 KB                 1010.05 MB/s       64643 ops/sec
-64 KB                 1012.18 MB/s       16195 ops/sec
-256 KB                 997.37 MB/s        3989 ops/sec
-1 MB                   981.93 MB/s         982 ops/sec
+64 bytes               251.96 MB/s
+256 bytes              617.32 MB/s
+1 KB                   890.65 MB/s
+4 KB                   949.16 MB/s
+16 KB                  984.10 MB/s
+64 KB                  987.81 MB/s
+256 KB                 971.45 MB/s
+1 MB                   960.73 MB/s
+10 MB                  971.29 MB/s
+100 MB                 978.56 MB/s
+1000 MB                949.39 MB/s
 
 blake3-optimized:
 
-64 bytes               257.29 MB/s     4215370 ops/sec
-256 bytes              673.72 MB/s     2759553 ops/sec
-1 KB                   942.31 MB/s      964921 ops/sec
-4 KB                   971.53 MB/s      248712 ops/sec
-16 KB                  985.21 MB/s       63054 ops/sec
-64 KB                  988.35 MB/s       15814 ops/sec
-256 KB                 964.39 MB/s        3858 ops/sec
-1 MB                   973.31 MB/s         973 ops/sec
+64 bytes               213.17 MB/s
+256 bytes              605.12 MB/s
+1 KB                   874.28 MB/s
+4 KB                   935.69 MB/s
+16 KB                  961.98 MB/s
+64 KB                  952.33 MB/s
+256 KB                 945.63 MB/s
+1 MB                   957.84 MB/s
+10 MB                  943.09 MB/s
+100 MB                 930.21 MB/s
+1000 MB                923.87 MB/s
