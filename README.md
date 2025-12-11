@@ -1,75 +1,3 @@
-https://x.com/zooko/status/1998185559542657145
-
-"I'll pay somebody 10ⓩ (that's a lot of money!) to implement BLAKE3 in JavaScript using all the optimizations described in this blog post: https://web.archive.org/web/20250320125147/https://blog.fleek.network/post/fleek-network-blake3-case-study/"
-
-Date:   2025-12-09 00:18:00 +0000
-
----
-https://github.com/Numi2/Blake3inJavasScript
-
-commit:
-
-Date:   2025-12-09 02:37:25 +0000
-
-supply-chain-attack risks: none
-tests: failed
-
----
-https://github.com/lamb356/blake3-optimized
-
-Commit:
-
-Date:   2025-12-09 02:37:40 +0000
-
-supply-chain-attack risks: none
-tests: passed
-
----
-https://github.com/alrightCha/blake3-js
-
-commit:
-
-Date:   2025-12-09 05:55:34 +0000
-
-supply-chain-attack risks: none
-tests: passed
-
----
-https://github.com/Atamanov/blake3-fast
-
-commit:
-
-Date:   2025-12-09 10:20:02 +0000
-
-supply-chain-attack risks: optional dev dependencies but they are not required for build, and there are no runtime dependencies
-tests: passed
-
----
-https://github.com/chimmykk/Bk3JS
-
-commit:
-
-Date:   2025-12-09 12:48:38 +0000
-
-supply-chain-attack risks: none
-tests: passed
-
----
-https://x.com/zooko/status/1998407780114567360
-
-"Whoa, whoa, it's only been 14 hours and there are already two submissions that look complete. So if you're looking at doing this for the Zcash, don't start because those other folks already beat you to it. (But you can still do it for love.)"
-
-Date:   2025-12-09 15:01:00 +0000
-
-(Narrator voice: there were actually 5, judging by self-assigned timestamps in git commits.)
-
----
-
-DONE: check each submission for matching the official BLAKE3 test vectors
-
-TODO: add checks for packaging, docs, tests, benchmarks
-
----
 benchmarks (see files named "bench-w-blake3-optimized.output.txt" in the various subdirs).
 
 These were all run on an Apple M4 Max CPU with Macos 26.1.
@@ -116,3 +44,114 @@ all input sizes.
 Also: it seems like a multithreaded implementation ought to achieve about 4X the throughput for each
 4X increase in the input size (starting with the 1 KB input size since that is the size of a BLAKE3
 Merkle Tree leaf).
+
+--- Log:
+
+https://x.com/zooko/status/1998185559542657145
+
+"I'll pay somebody 10ⓩ (that's a lot of money!) to implement BLAKE3 in JavaScript using all the optimizations described in this blog post: https://web.archive.org/web/20250320125147/https://blog.fleek.network/post/fleek-network-blake3-case-study/"
+
+Date:   2025-12-09 00:18:00 +0000
+
+---
+https://github.com/Numi2/Blake3inJavasScript
+
+commit:
+
+Date:   2025-12-09 02:37:25 +0000
+
+supply-chain-attack risks: none
+tests: failed
+
+one file
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Language              Files        Lines         Code     Comments       Blanks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ JavaScript                1          488          342           82           64
+
+---
+https://github.com/lamb356/blake3-optimized
+
+Commit:
+
+Date:   2025-12-09 02:37:40 +0000
+
+supply-chain-attack risks: none
+tests: passed
+
+one file (not counting TypeScript type file)
+tests
+benchmarks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Language              Files        Lines         Code     Comments       Blanks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ JavaScript                1          304          220           44           40
+ TypeScript                1           47            7           33            7
+
+---
+https://github.com/alrightCha/blake3-js
+
+commit:
+
+Date:   2025-12-09 05:55:34 +0000
+
+supply-chain-attack risks: none
+tests: passed
+
+one file
+tests
+benchmarks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Language              Files        Lines         Code     Comments       Blanks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ TypeScript                1          453          385           23           45
+
+---
+https://github.com/Atamanov/blake3-fast
+
+commit:
+
+Date:   2025-12-09 10:20:02 +0000
+
+supply-chain-attack risks: optional dev dependencies but they are not required for build, and there are no runtime dependencies
+tests: passed
+
+8 files, nice progressive/adaptive design according to the readme
+tests
+benchmarks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Language              Files        Lines         Code     Comments       Blanks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ TypeScript                8         5847         4201         1073          573
+
+---
+https://github.com/chimmykk/Bk3JS
+
+commit:
+
+Date:   2025-12-09 12:48:38 +0000
+
+supply-chain-attack risks: none
+tests: passed
+
+one file
+tests
+benchmarks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Language              Files        Lines         Code     Comments       Blanks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ JavaScript                1          820          687           55           78
+
+---
+https://x.com/zooko/status/1998407780114567360
+
+"Whoa, whoa, it's only been 14 hours and there are already two submissions that look complete. So if you're looking at doing this for the Zcash, don't start because those other folks already beat you to it. (But you can still do it for love.)"
+
+Date:   2025-12-09 15:01:00 +0000
+
+(Narrator voice: there were actually 5, judging by self-assigned timestamps in git commits.)
