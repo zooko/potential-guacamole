@@ -1,8 +1,8 @@
 import { blake3 } from 'hash-wasm';
 import fs from 'fs';
 
-console.log('BLAKE3/SHA-256 - Benchmark Suite');
-console.log('================================');
+console.log('BLAKE3/SHA-256 - Benchmarks');
+console.log('===========================');
 
 // Warmup
 console.log('Warming up...');
@@ -20,7 +20,7 @@ async function benchmark(name, data, iterations) {
   const throughput = (data.length * iterations / 1024 / 1024) / (elapsed / 1000);
   const opsPerSec = (iterations / elapsed) * 1000;
 
-  console.log(`${name.padEnd(20)} ${throughput.toFixed(2).padStart(8)} MB/s  ${opsPerSec.toFixed(0).padStart(10)} ops/sec`);
+  console.log(`${name.padEnd(20)} ${throughput.toFixed(2).padStart(8)} MB/s`);
   return throughput;
 }
 
@@ -36,6 +36,9 @@ const sizes = [
   ['64 KB', 65536, 1000],
   ['256 KB', 262144, 500],
   ['1 MB', 1048576, 100],
+  ['10 MB', 1048576 * 10, 10],
+  ['100 MB', 1048576 * 100, 1],
+  ['1000 MB', 1048576 * 1000, 1],
 ];
 
 for (const [name, size, iterations] of sizes) {
