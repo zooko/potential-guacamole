@@ -1,0 +1,23 @@
+BLAKE3 Optimized v1.3.0 (SIMD) - Benchmark Suite
+=================================================
+
+Warming up...
+SIMD initialized: true
+
+Throughput Benchmark:
+──────────────────────────────────────────────────
+64 bytes                44.52 MB/s      729392 ops/sec
+256 bytes              177.92 MB/s      728763 ops/sec
+1 KB                   302.17 MB/s      309427 ops/sec
+4 KB                   624.53 MB/s      159881 ops/sec
+16 KB                  787.51 MB/s       50401 ops/sec
+64 KB                  869.25 MB/s       13908 ops/sec
+256 KB                 856.97 MB/s        3428 ops/sec
+1 MB                   864.41 MB/s         864 ops/sec
+
+──────────────────────────────────────────────────
+Mode: WASM SIMD (single-threaded)
+
+Hardware: Intel Core i9-9900K @ 3.60GHz
+Node.js: v24.11.0
+OS: Windows

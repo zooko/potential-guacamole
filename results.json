@@ -1,0 +1,120 @@
+{
+  "timestamp": "2026-02-05T02:20:04.761Z",
+  "platform": "win32",
+  "arch": "x64",
+  "nodeVersion": "v24.11.0",
+  "title": "BLAKE3 vs SHA-256: Portable Code Beats Native",
+  "implementations": [
+    {
+      "name": "Native SHA-256",
+      "shortName": "sha256-native",
+      "color": "#4a4458"
+    },
+    {
+      "name": "WebCrypto SHA-256",
+      "shortName": "sha256-wc",
+      "color": "#6b6280"
+    },
+    {
+      "name": "Native BLAKE3 (1T)",
+      "shortName": "blake3-native",
+      "color": "#22c55e"
+    },
+    {
+      "name": "Native BLAKE3 (Rayon)",
+      "shortName": "blake3-native-rayon",
+      "color": "#059669"
+    },
+    {
+      "name": "WASM BLAKE3 (8T)",
+      "shortName": "blake3-wasm",
+      "color": "#3b82f6"
+    }
+  ],
+  "results": {
+    "sha256-native": {
+      "64 bytes": 31,
+      "256 bytes": 116,
+      "1 KB": 251,
+      "4 KB": 454,
+      "16 KB": 528,
+      "64 KB": 536,
+      "256 KB": 550,
+      "1 MB": 557
+    },
+    "sha256-wc": {
+      "64 bytes": 3,
+      "256 bytes": 12,
+      "1 KB": 42,
+      "4 KB": 136,
+      "16 KB": 304,
+      "64 KB": 447,
+      "256 KB": 511,
+      "1 MB": 491
+    },
+    "blake3-native": {
+      "64 bytes": 47,
+      "256 bytes": 174,
+      "1 KB": 490,
+      "4 KB": 1446,
+      "16 KB": 3226,
+      "64 KB": 3852,
+      "256 KB": 4364,
+      "1 MB": 4494
+    },
+    "blake3-native-rayon": {
+      "64 bytes": 44,
+      "256 bytes": 142,
+      "1 KB": 463,
+      "4 KB": 1363,
+      "16 KB": 696,
+      "64 KB": 2953,
+      "256 KB": 11425,
+      "1 MB": 21410
+    },
+    "blake3-wasm": {
+      "64 bytes": 243,
+      "256 bytes": 596,
+      "1 KB": 873,
+      "4 KB": 1503,
+      "16 KB": 1462,
+      "64 KB": 2551,
+      "256 KB": 4923,
+      "1 MB": 5073
+    }
+  },
+  "sizes": [
+    {
+      "name": "64 bytes",
+      "bytes": 64
+    },
+    {
+      "name": "256 bytes",
+      "bytes": 256
+    },
+    {
+      "name": "1 KB",
+      "bytes": 1024
+    },
+    {
+      "name": "4 KB",
+      "bytes": 4096
+    },
+    {
+      "name": "16 KB",
+      "bytes": 16384
+    },
+    {
+      "name": "64 KB",
+      "bytes": 65536
+    },
+    {
+      "name": "256 KB",
+      "bytes": 262144
+    },
+    {
+      "name": "1 MB",
+      "bytes": 1048576
+    }
+  ]
+}

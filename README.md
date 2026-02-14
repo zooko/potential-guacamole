@@ -1,3 +1,39 @@
+## BLAKE3 Parallel WASM Browser Benchmark
+
+**Peak Performance (i9-9900K, Chrome):**
+| Implementation | Peak Throughput | Notes |
+|---------------|-----------------|-------|
+| BLAKE3 Native (Rayon) | 4.3 GB/s | Node.js with @napi-rs/blake-hash |
+| BLAKE3 WASM Parallel | 2.86 GB/s | Browser with 16 Web Workers + SharedArrayBuffer |
+| BLAKE3 WASM Single | 703 MB/s | Single-threaded WebAssembly |
+| SHA-256 (Node.js sync) | 556 MB/s | crypto.createHash |
+| SHA-256 (WebCrypto) | 131 MB/s | Browser crypto.subtle.digest |
+
+### Run Browser Benchmark (Parallel WASM)
+```bash
+cd potential-guacamole
+node candidates/blake3-browser-benchmark/server.js
+# Open http://localhost:3000 in Chrome
+```
+Requires SharedArrayBuffer (server sets COOP/COEP headers).
+
+### Run Node.js Benchmarks
+```bash
+# Native BLAKE3 vs SHA-256 scaling
+node candidates/blake3-scaling-complete/benchmark.js
+
+# Single-threaded WASM
+node candidates/blake3-single/benchmark.js
+```
+
+### Files Added
+- `blake3-wasm-rayon/` - Rust WASM with wasm-bindgen-rayon (parallel)
+- `blake3-wasm-single/` - Rust WASM single-threaded
+- `candidates/blake3-browser-benchmark/` - Browser benchmark + server
+- `candidates/blake3-scaling-complete/` - Comprehensive Node.js benchmark + chart
+- `candidates/blake3-native-scaling/` - Native vs SHA-256 comparison
+
+---
 
 --- after-the-bounty followups:
 
@@ -7,7 +43,26 @@ These bounty competitors seem to have added substantial improvements after the c
 
 New implementation after the contest: https://github.com/HuntsmanADHD/Blake3-JavaScript
 
+### lamb356/blake3-optimized v1.3.0 Benchmark Results
 
+Benchmarked on Intel Core i9-9900K @ 3.60GHz, Node.js v24.11.0, Windows
+
+| Size | SIMD (MB/s) | Parallel (MB/s) |
+|------|-------------|-----------------|
+| 64B  | 44.52       | 26.50           |
+| 256B | 177.92      | 96.57           |
+| 1KB  | 302.17      | 244.95          |
+| 4KB  | 624.53      | 566.97          |
+| 16KB | 787.51      | 728.33          |
+| 64KB | 869.25      | 708.02          |
+| 256KB| 856.97      | 449.97          |
+| 1MB  | 864.41      | 647.76          |
+
+Notes:
+- SIMD mode uses WASM SIMD (single-threaded)
+- Parallel mode uses worker_threads (15 workers)
+- SIMD outperformed Parallel at all sizes (worker coordination overhead)
+- Results lower than M4 Max benchmarks due to CPU architecture differences
 
 --- bountry benchmarks
 

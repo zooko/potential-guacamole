@@ -1,0 +1,36 @@
+BLAKE3/SHA-256 Multi-Candidate Benchmark
+=========================================
+
+Loading implementations...
+  ✓ wc sha256
+  ✓ hash-wasm
+  ✓ Bk3JS
+  ✓ blake3-fa
+  ✓ blake3-js
+  ✓ blake3-op
+  ✓ blake3-si
+
+Warming up...
+
+Vals are throughput in MB/s. Higher is better.
+
+               pre-existing    candidates
+           ------------------- -------------------------------------------------
+input size  wc sha256 hash-wasm     Bk3JS blake3-fa blake3-js blake3-op blake3-si
+----------- --------- --------- --------- --------- --------- --------- ---------
+64 bytes            3        27        94       159       112        57     231 *
+256 bytes          11       102       216       404       257        96     506 *
+1 KB               42       285       355     613 *       380       115     665 *
+4 KB              138       464       397     814 *       387       224     735 *
+16 KB             300       623       702    1152 *       413       228       740
+64 KB             444       669       946    1134 *       403       225       721
+256 KB            510       686      1024    1150 *       417       230       722
+1 MB              486       677       929    1161 *       413       228       716
+
+`*` marks the fastest one, as well as any others within 10% of the fastest one
+
+Notes:
+- blake-hash (native BLAKE3) skipped - requires darwin-arm64 binary
+- blake3-si is our single-threaded WASM implementation (wasm-bindgen)
+- Browser parallel version (blake3-wasm-rayon with 16 Web Workers)
+  achieves 2,855 MB/s at 1MB but requires browser + SharedArrayBuffer

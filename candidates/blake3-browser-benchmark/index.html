@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLAKE3 WASM Parallel Browser Benchmark</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #1a1a2e;
+      color: #eee;
+    }
+    h1 {
+      text-align: center;
+      color: #00d4ff;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 20px;
+    }
+    .status-box {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .status {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .progress-container {
+      background: #0f3460;
+      border-radius: 8px;
+      height: 24px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #00d4ff, #e056fd);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 8px;
+    }
+    .progress-text {
+      color: #888;
+      font-size: 14px;
+    }
+    .error {
+      color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+    }
+    .stat-card h3 {
+      margin: 0 0 10px 0;
+      color: #888;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .blake3 { color: #00d4ff; }
+    .sha256 { color: #26de81; }
+    .chart-container {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #16213e;
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: right;
+    }
+    th {
+      background: #0f3460;
+      color: #00d4ff;
+      font-weight: 600;
+    }
+    td:first-child, th:first-child {
+      text-align: left;
+    }
+    tr:nth-child(even) {
+      background: rgba(255,255,255,0.03);
+    }
+    .run-btn {
+      background: linear-gradient(90deg, #00d4ff, #e056fd);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    .run-btn:hover {
+      opacity: 0.9;
+    }
+    .run-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .hidden { display: none; }
+    .env-info {
+      background: #0f3460;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #888;
+    }
+    .env-info span {
+      color: #00d4ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>BLAKE3 WASM Parallel Browser Benchmark</h1>
+  <p class="subtitle">Real wasm-bindgen-rayon performance with Web Workers + SharedArrayBuffer</p>
+
+  <div class="env-info">
+    Cores: <span id="cores">-</span> |
+    SharedArrayBuffer: <span id="sab">-</span> |
+    WASM Threads: <span id="wasmThreads">-</span>
+  </div>
+
+  <div class="status-box">
+    <div class="status" id="status">Initializing...</div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">Loading WASM module...</div>
+    <button class="run-btn hidden" id="runBtn" onclick="runBenchmark()">Run Benchmark</button>
+  </div>
+
+  <div id="errorBox" class="error hidden"></div>
+
+  <div id="results" class="hidden">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>BLAKE3 Peak</h3>
+        <div class="stat-value blake3" id="blake3Peak">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>SHA-256 Peak</h3>
+        <div class="stat-value sha256" id="sha256Peak">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>Speedup</h3>
+        <div class="stat-value" id="speedup">-</div>
+      </div>
+      <div class="stat-card">
+        <h3>Thread Pool</h3>
+        <div class="stat-value blake3" id="threadCount">-</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
+    </div>
+
+    <h2 style="color: #00d4ff;">Raw Data</h2>
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>Size</th>
+          <th>BLAKE3 (MB/s)</th>
+          <th>SHA-256 (MB/s)</th>
+          <th>Speedup</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    // Benchmark sizes and iterations
+    const SIZES = [
+      ["64 B",     64,          50000],
+      ["256 B",    256,         20000],
+      ["1 KB",     1024,        10000],
+      ["4 KB",     4096,        5000],
+      ["16 KB",    16384,       2000],
+      ["64 KB",    65536,       1000],
+      ["256 KB",   262144,      200],
+      ["1 MB",     1048576,     50],
+      ["2 MB",     2097152,     30],
+      ["4 MB",     4194304,     20],
+      ["8 MB",     8388608,     10],
+      ["16 MB",    16777216,    5],
+      ["32 MB",    33554432,    3],
+      ["64 MB",    67108864,    2],
+      ["128 MB",   134217728,   2],
+      ["256 MB",   268435456,   1],
+    ];
+
+    let wasmModule = null;
+    let threadCount = 0;
+
+    // UI elements
+    const statusEl = document.getElementById("status");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const runBtn = document.getElementById("runBtn");
+    const errorBox = document.getElementById("errorBox");
+    const resultsDiv = document.getElementById("results");
+
+    // Check environment
+    document.getElementById("cores").textContent = navigator.hardwareConcurrency || "unknown";
+    document.getElementById("sab").textContent = typeof SharedArrayBuffer !== "undefined" ? "Yes" : "No";
+    document.getElementById("wasmThreads").textContent = "Checking...";
+
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.classList.remove("hidden");
+      statusEl.textContent = "Error";
+      progressText.textContent = msg;
+    }
+
+    function updateProgress(pct, text) {
+      progressBar.style.width = pct + "%";
+      progressText.textContent = text;
+    }
+
+    // Initialize WASM module
+    async function initWasm() {
+      try {
+        if (typeof SharedArrayBuffer === "undefined") {
+          throw new Error("SharedArrayBuffer not available. Make sure COOP/COEP headers are set.");
+        }
+
+        updateProgress(10, "Loading WASM module...");
+
+        // Dynamic import of the WASM module (absolute path from repo root)
+        const wasmUrl = new URL("/blake3-wasm-rayon/pkg/blake3_wasm_rayon.js", window.location.origin).href;
+        console.log("Loading WASM from:", wasmUrl);
+        wasmModule = await import(wasmUrl);
+
+        updateProgress(30, "Initializing WASM...");
+
+        // Initialize WASM
+        await wasmModule.default();
+
+        updateProgress(50, "Creating thread pool...");
+
+        // Initialize thread pool
+        threadCount = navigator.hardwareConcurrency || 4;
+        await wasmModule.initThreadPool(threadCount);
+
+        document.getElementById("wasmThreads").textContent = threadCount + " workers";
+        document.getElementById("threadCount").textContent = threadCount;
+
+        updateProgress(100, "Ready to benchmark!");
+        statusEl.textContent = "Ready";
+        runBtn.classList.remove("hidden");
+
+      } catch (err) {
+        console.error("Init error:", err);
+        showError("Failed to initialize: " + err.message);
+        document.getElementById("wasmThreads").textContent = "Failed";
+      }
+    }
+
+    // Benchmark functions
+    function benchmarkBlake3(data, iterations) {
+      const start = performance.now();
+      for (let i = 0; i < iterations; i++) {
+        wasmModule.hash(data);
+      }
+      const elapsed = performance.now() - start;
+      return (data.length * iterations / 1024 / 1024) / (elapsed / 1000);
+    }
+
+    async function benchmarkSHA256(data, iterations) {
+      const start = performance.now();
+      for (let i = 0; i < iterations; i++) {
+        await crypto.subtle.digest("SHA-256", data);
+      }
+      const elapsed = performance.now() - start;
+      return (data.length * iterations / 1024 / 1024) / (elapsed / 1000);
+    }
+
+    // Main benchmark runner
+    window.runBenchmark = async function() {
+      runBtn.disabled = true;
+      resultsDiv.classList.add("hidden");
+      statusEl.textContent = "Benchmarking...";
+
+      const results = [];
+      const totalSteps = SIZES.length * 2; // BLAKE3 + SHA-256 for each size
+      let currentStep = 0;
+
+      // Warmup
+      updateProgress(0, "Warming up...");
+      const warmupData = new Uint8Array(1024);
+      for (let i = 0; i < 100; i++) {
+        wasmModule.hash(warmupData);
+        await crypto.subtle.digest("SHA-256", warmupData);
+      }
+
+      for (const [name, size, iterations] of SIZES) {
+        // Create test data
+        const data = new Uint8Array(size);
+        for (let i = 0; i < Math.min(size, 1024); i++) data[i] = i & 0xff;
+
+        // Benchmark BLAKE3
+        currentStep++;
+        updateProgress((currentStep / totalSteps) * 100, `BLAKE3: ${name}...`);
+        await new Promise(r => setTimeout(r, 10)); // Let UI update
+
+        const blake3Mbps = benchmarkBlake3(data, iterations);
+
+        // Benchmark SHA-256
+        currentStep++;
+        updateProgress((currentStep / totalSteps) * 100, `SHA-256: ${name}...`);
+        await new Promise(r => setTimeout(r, 10));
+
+        const sha256Mbps = await benchmarkSHA256(data, iterations);
+
+        results.push({
+          name,
+          size,
+          blake3: blake3Mbps,
+          sha256: sha256Mbps,
+          ratio: blake3Mbps / sha256Mbps
+        });
+
+        console.log(`${name}: BLAKE3=${blake3Mbps.toFixed(0)} SHA256=${sha256Mbps.toFixed(0)} ratio=${(blake3Mbps/sha256Mbps).toFixed(2)}x`);
+      }
+
+      // Display results
+      displayResults(results);
+
+      statusEl.textContent = "Complete!";
+      updateProgress(100, "Benchmark complete");
+      runBtn.disabled = false;
+    };
+
+    function displayResults(results) {
+      resultsDiv.classList.remove("hidden");
+
+      // Stats
+      const blake3Max = Math.max(...results.map(r => r.blake3));
+      const sha256Max = Math.max(...results.map(r => r.sha256));
+
+      document.getElementById("blake3Peak").textContent = formatMBps(blake3Max);
+      document.getElementById("sha256Peak").textContent = formatMBps(sha256Max);
+      document.getElementById("speedup").textContent = (blake3Max / sha256Max).toFixed(1) + "x";
+
+      // Table
+      const tbody = document.querySelector("#dataTable tbody");
+      tbody.innerHTML = results.map(r => `
+        <tr>
+          <td>${r.name}</td>
+          <td class="blake3">${r.blake3.toFixed(2)}</td>
+          <td class="sha256">${r.sha256.toFixed(2)}</td>
+          <td>${r.ratio.toFixed(2)}x</td>
+        </tr>
+      `).join("");
+
+      // Chart
+      drawChart(results);
+    }
+
+    function formatMBps(mbps) {
+      if (mbps >= 1000) return (mbps / 1000).toFixed(2) + " GB/s";
+      return mbps.toFixed(0) + " MB/s";
+    }
+
+    function drawChart(results) {
+      const ctx = document.getElementById("chart").getContext("2d");
+
+      // Destroy existing chart if any
+      if (window.benchmarkChart) {
+        window.benchmarkChart.destroy();
+      }
+
+      window.benchmarkChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: results.map(r => r.name),
+          datasets: [
+            {
+              label: "BLAKE3 WASM (parallel)",
+              data: results.map(r => r.blake3),
+              borderColor: "#00d4ff",
+              backgroundColor: "rgba(0, 212, 255, 0.1)",
+              borderWidth: 3,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3,
+              fill: false
+            },
+            {
+              label: "SHA-256 (WebCrypto)",
+              data: results.map(r => r.sha256),
+              borderColor: "#26de81",
+              backgroundColor: "rgba(38, 222, 129, 0.1)",
+              borderWidth: 3,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.3,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 2,
+          interaction: {
+            intersect: false,
+            mode: "index"
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: "BLAKE3 vs SHA-256: Throughput by Input Size",
+              color: "#eee",
+              font: { size: 18 }
+            },
+            legend: {
+              position: "top",
+              labels: {
+                color: "#eee",
+                font: { size: 14 },
+                padding: 20
+              }
+            },
+            tooltip: {
+              backgroundColor: "rgba(0,0,0,0.8)",
+              callbacks: {
+                label: ctx => ctx.dataset.label + ": " + ctx.parsed.y.toFixed(2) + " MB/s"
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "Input Size",
+                color: "#888"
+              },
+              ticks: { color: "#888" },
+              grid: { color: "rgba(255,255,255,0.1)" }
+            },
+            y: {
+              type: "logarithmic",
+              title: {
+                display: true,
+                text: "Throughput (MB/s) - Log Scale",
+                color: "#888"
+              },
+              ticks: {
+                color: "#888",
+                callback: v => v >= 1000 ? (v/1000).toFixed(1) + "K" : v
+              },
+              grid: { color: "rgba(255,255,255,0.1)" }
+            }
+          }
+        }
+      });
+    }
+
+    // Start initialization
+    initWasm();
+  </script>
+</body>
+</html>

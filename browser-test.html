@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BLAKE3 vs SHA-256 Browser Benchmark</title>
+  <!-- Try to enable SharedArrayBuffer on GitHub Pages (may not work on all browsers) -->
+  <script src="coi-serviceworker.min.js"></script>
+  <style>
+    /* Minimal CSS for readability */
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 10px 15px;
+      background: #1a1a2e;
+      color: #eee;
+    }
+    h1 { text-align: center; margin: 8px 0; }
+    .subtitle { text-align: center; color: #888; margin-bottom: 10px; }
+
+    /* File input area */
+    .file-area {
+      border: 2px dashed #444;
+      border-radius: 8px;
+      padding: 15px 20px;
+      text-align: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .file-area:hover { border-color: #666; }
+    .file-area.dragover { border-color: #4a9eff; background: #1a2a3e; }
+    .file-area input { display: none; }
+    .file-area button {
+      background: #4a9eff;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    /* Results grid - side by side comparison */
+    .results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+      .results { grid-template-columns: 1fr; }
+    }
+
+    .result-card {
+      background: #252540;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .result-card h3 {
+      margin: 0 0 8px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #333;
+    }
+    .result-card.blake3 h3 { color: #4ade80; }
+    .result-card.sha256 h3 { color: #a78bfa; }
+
+    .stat { margin: 4px 0; }
+    .stat-label { color: #888; font-size: 14px; }
+    .stat-value { font-family: monospace; font-size: 14px; word-break: break-all; }
+    .stat-value.big { font-size: 20px; font-weight: bold; }
+
+    .winner { background: #1a3a1a !important; }
+    .loading { color: #888; }
+
+    .file-info {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ccc;
+    }
+
+    .system-info {
+      background: #252540;
+      border-radius: 8px;
+      padding: 8px 14px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #888;
+      line-height: 1.4;
+    }
+    .system-info summary {
+      color: #ccc;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .system-info span.val { color: #bbb; }
+  </style>
+</head>
+<body>
+  <h1>BLAKE3 vs SHA-256</h1>
+  <p class="subtitle">Browser Benchmark - Drop a file to compare</p>
+
+  <!-- File input (supports both drag-drop and click) -->
+  <div class="file-area" id="file-area">
+    <p style="margin: 4px 0;">Drop a file here</p>
+    <button type="button">Choose File</button>
+    <input type="file" id="file-input">
+  </div>
+
+  <!-- Side-by-side results -->
+  <div class="results" id="results" style="display: none;">
+    <!-- Mode banner spanning both columns -->
+    <div id="mode-banner" style="grid-column: 1 / -1; text-align: center; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: bold;"></div>
+
+    <!-- BLAKE3 Result -->
+    <div class="result-card blake3" id="blake3-card">
+      <h3 id="blake3-title">WASM BLAKE3</h3>
+      <div class="stat">
+        <div class="stat-value big" id="blake3-speed">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="blake3-time">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Hash</div>
+        <div class="stat-value" id="blake3-hash">-</div>
+      </div>
+    </div>
+
+    <!-- SHA-256 Result -->
+    <div class="result-card sha256" id="sha256-card">
+      <h3>WebCrypto SHA-256</h3>
+      <div class="stat">
+        <div class="stat-value big" id="sha256-speed">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="sha256-time">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Hash</div>
+        <div class="stat-value" id="sha256-hash">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="file-info" id="file-info" style="display: none;"></div>
+
+  <p id="status" class="loading" style="text-align: center; margin-top: 8px;">
+    Loading WASM module...
+  </p>
+
+  <!-- System Info — collapsible for compact layout -->
+  <details class="system-info" id="system-info">
+    <summary>System Info</summary>
+    <div>Browser: <span class="val" id="info-browser">-</span></div>
+    <div>Platform: <span class="val" id="info-platform">-</span></div>
+    <div>CPU Cores: <span class="val" id="info-cores">-</span></div>
+    <div>BLAKE3 Mode: <span class="val" id="info-mode">loading...</span></div>
+    <div>Benchmark: <span class="val" id="info-timestamp">-</span></div>
+  </details>
+
+  <!--
+    ============================================================
+    BLAKE3 WASM BROWSER IMPLEMENTATION
+    ============================================================
+
+    This code uses WASM BLAKE3 in the browser with automatic fallback:
+    - If SharedArrayBuffer is available: uses 4-thread parallel mode
+    - Otherwise: uses single-threaded SIMD mode
+
+    Both modes produce identical hashes. Parallel is faster on
+    multi-core systems, but single-threaded works everywhere.
+
+    Dependencies (parallel mode):
+    - blake3-wasm-rayon/pkg/blake3_wasm_rayon.js
+    - blake3-wasm-rayon/pkg/blake3_wasm_rayon_bg.wasm
+
+    Dependencies (single-threaded fallback):
+    - blake3-wasm-single/pkg/blake3_wasm_single.js
+    - blake3-wasm-single/pkg/blake3_wasm_single_bg.wasm
+    ============================================================
+  -->
+  <script type="module">
+    // ============================================================
+    // GLOBAL STATE
+    // ============================================================
+    let blake3Hash = null;    // Hash function reference
+    let isReady = false;      // Initialization complete flag
+    let isParallel = false;   // Using parallel mode?
+
+    // ============================================================
+    // INITIALIZATION - Try parallel, fall back to single-threaded
+    // ============================================================
+    async function init() {
+      const status = document.getElementById('status');
+      const blake3Title = document.getElementById('blake3-title');
+      const modeBanner = document.getElementById('mode-banner');
+
+      // Debug: log SharedArrayBuffer availability for Brave/Safari debugging
+      console.log('[BLAKE3] SharedArrayBuffer defined:', typeof SharedArrayBuffer !== 'undefined');
+      console.log('[BLAKE3] crossOriginIsolated:', self.crossOriginIsolated);
+      console.log('[BLAKE3] COOP header:', document.referrer !== undefined ? 'page loaded' : 'unknown');
+
+      // Try parallel mode first (requires SharedArrayBuffer)
+      if (typeof SharedArrayBuffer === 'undefined') {
+        console.warn('[BLAKE3] SharedArrayBuffer is undefined — skipping parallel mode');
+        console.warn('[BLAKE3] crossOriginIsolated:', self.crossOriginIsolated,
+          '— COOP/COEP headers are required for SharedArrayBuffer');
+      }
+      if (typeof SharedArrayBuffer !== 'undefined') {
+        try {
+          const module = await import('./blake3-wasm-rayon/pkg/blake3_wasm_rayon.js');
+          const wasmResponse = await fetch('./blake3-wasm-rayon/pkg/blake3_wasm_rayon_bg.wasm');
+          const wasmBytes = await wasmResponse.arrayBuffer();
+          const wasmModule = await WebAssembly.compile(wasmBytes);
+          await module.default({ module_or_path: wasmModule });
+          await module.initThreadPool(4);
+
+          blake3Hash = (data) => module.hash(data);
+          isParallel = true;
+          isReady = true;
+
+          blake3Title.textContent = 'WASM BLAKE3 (4 threads)';
+          status.textContent = 'Ready! Using parallel mode (4 threads).';
+          status.style.color = '#4ade80';
+          modeBanner.textContent = 'Parallel mode — 4 threads (SharedArrayBuffer + Web Workers)';
+          modeBanner.style.background = '#1a3a1a';
+          modeBanner.style.color = '#4ade80';
+          document.getElementById('info-mode').textContent = 'Parallel (4 threads, SharedArrayBuffer + Web Workers)';
+          console.log('[BLAKE3] Initialized: parallel mode (4 threads)');
+        } catch (err) {
+          console.warn('[BLAKE3] Parallel mode failed:', err.message);
+          console.warn('[BLAKE3] Full error:', err);
+        }
+      }
+
+      // Fall back to single-threaded mode (skip if rayon already succeeded)
+      if (!isReady) try {
+        const module = await import('./blake3-wasm-single/pkg/blake3_wasm_single.js');
+        const wasmResponse = await fetch('./blake3-wasm-single/pkg/blake3_wasm_single_bg.wasm');
+        const wasmBytes = await wasmResponse.arrayBuffer();
+        const wasmModule = await WebAssembly.compile(wasmBytes);
+        await module.default(wasmModule);
+
+        blake3Hash = (data) => module.hash(data);
+        isParallel = false;
+        isReady = true;
+
+        blake3Title.textContent = 'WASM BLAKE3 (single-threaded)';
+        status.textContent = 'Ready! Using single-threaded mode.';
+        status.style.color = '#fbbf24';
+        modeBanner.textContent = 'Single-threaded mode (WASM SIMD)';
+        modeBanner.style.background = '#3a2a1a';
+        modeBanner.style.color = '#fbbf24';
+        document.getElementById('info-mode').textContent = 'Single-threaded (WASM SIMD)';
+        console.log('[BLAKE3] Initialized: single-threaded mode');
+      } catch (err) {
+        status.textContent = 'Failed to load BLAKE3: ' + err.message;
+        status.style.color = '#f87171';
+        console.error('BLAKE3 init error:', err);
+      }
+
+    }
+
+    // ============================================================
+    // HASH FUNCTIONS
+    // ============================================================
+
+    // Hash data with WebCrypto SHA-256
+    async function hashSha256(data) {
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      return new Uint8Array(hashBuffer);
+    }
+
+    // Convert bytes to hex string
+    function toHex(bytes) {
+      return Array.from(bytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    // Format bytes as human-readable size
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+      return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+    }
+
+    // Populate system info that doesn't depend on WASM init
+    function populateSystemInfo() {
+      document.getElementById('info-browser').textContent = navigator.userAgent;
+      document.getElementById('info-platform').textContent =
+        navigator.platform + (navigator.userAgentData ? ' (' + navigator.userAgentData.platform + ')' : '');
+      document.getElementById('info-cores').textContent =
+        navigator.hardwareConcurrency ? navigator.hardwareConcurrency + ' logical cores' : 'unknown';
+    }
+
+    // ============================================================
+    // BENCHMARK
+    // ============================================================
+
+    async function benchmarkFile(file) {
+      if (!isReady) {
+        alert('BLAKE3 not ready yet. Please wait.');
+        return;
+      }
+
+      const results = document.getElementById('results');
+      const status = document.getElementById('status');
+      const fileInfo = document.getElementById('file-info');
+      results.style.display = 'grid';
+      fileInfo.style.display = 'block';
+      fileInfo.textContent = `${file.name} — ${formatSize(file.size)}`;
+      status.textContent = `Hashing ${file.name} (${formatSize(file.size)})...`;
+      document.getElementById('info-timestamp').textContent = new Date().toLocaleString();
+
+      // Read file into memory
+      const arrayBuffer = await file.arrayBuffer();
+      const data = new Uint8Array(arrayBuffer);
+
+      // --- BLAKE3 Benchmark ---
+      const blake3Start = performance.now();
+      const blake3HashResult = blake3Hash(data);
+      const blake3Time = performance.now() - blake3Start;
+      const blake3Speed = (file.size / 1024 / 1024) / (blake3Time / 1000);
+
+      document.getElementById('blake3-hash').textContent = toHex(blake3HashResult).slice(0, 16) + '...';
+      document.getElementById('blake3-time').textContent = blake3Time.toFixed(2) + ' ms';
+      document.getElementById('blake3-speed').textContent = blake3Speed.toFixed(0) + ' MB/s';
+
+      // --- SHA-256 Benchmark ---
+      const sha256Start = performance.now();
+      const sha256HashResult = await hashSha256(data);
+      const sha256Time = performance.now() - sha256Start;
+      const sha256Speed = (file.size / 1024 / 1024) / (sha256Time / 1000);
+
+      document.getElementById('sha256-hash').textContent = toHex(sha256HashResult).slice(0, 16) + '...';
+      document.getElementById('sha256-time').textContent = sha256Time.toFixed(2) + ' ms';
+      document.getElementById('sha256-speed').textContent = sha256Speed.toFixed(0) + ' MB/s';
+
+      // Highlight winner (between single-threaded BLAKE3 and SHA-256)
+      const blake3Card = document.getElementById('blake3-card');
+      const sha256Card = document.getElementById('sha256-card');
+      blake3Card.classList.remove('winner');
+      sha256Card.classList.remove('winner');
+
+      if (blake3Speed > sha256Speed) {
+        blake3Card.classList.add('winner');
+        const ratio = (blake3Speed / sha256Speed).toFixed(1);
+        status.textContent = `BLAKE3 wins! ${ratio}x faster than SHA-256`;
+        status.style.color = '#4ade80';
+      } else {
+        sha256Card.classList.add('winner');
+        const ratio = (sha256Speed / blake3Speed).toFixed(1);
+        status.textContent = `SHA-256 wins! ${ratio}x faster than BLAKE3`;
+        status.style.color = '#a78bfa';
+      }
+    }
+
+    // ============================================================
+    // EVENT HANDLERS
+    // ============================================================
+
+    const fileArea = document.getElementById('file-area');
+    const fileInput = document.getElementById('file-input');
+
+    // Click to open file picker (works on mobile)
+    fileArea.addEventListener('click', () => fileInput.click());
+
+    // File selected via picker
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) benchmarkFile(e.target.files[0]);
+    });
+
+    // Drag and drop
+    fileArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileArea.classList.add('dragover');
+    });
+    fileArea.addEventListener('dragleave', () => {
+      fileArea.classList.remove('dragover');
+    });
+    fileArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileArea.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) benchmarkFile(e.dataTransfer.files[0]);
+    });
+
+    // Initialize on page load
+    populateSystemInfo();
+    init();
+  </script>
+</body>
+</html>

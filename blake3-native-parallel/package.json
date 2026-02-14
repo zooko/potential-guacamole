@@ -1,0 +1,15 @@
+{
+  "name": "blake3-native-parallel",
+  "version": "0.1.0",
+  "main": "index.js",
+  "napi": {
+    "name": "blake3_native_parallel",
+    "triples": {}
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^2.18.0"
+  },
+  "scripts": {
+    "build": "napi build --platform --release"
+  }
+}

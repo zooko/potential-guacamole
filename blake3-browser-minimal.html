@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>BLAKE3 Minimal Example</title>
+  <!-- Try to enable SharedArrayBuffer on GitHub Pages -->
+  <script src="coi-serviceworker.min.js"></script>
+</head>
+<body>
+  <h1>BLAKE3 Minimal Browser Example</h1>
+  <p id="mode">Loading...</p>
+  <input type="file" id="file" disabled>
+  <pre id="output">Select a file to hash...</pre>
+
+  <!--
+    ============================================================
+    MINIMAL BLAKE3 WASM USAGE - COPY THIS INTO YOUR PROJECT
+    ============================================================
+
+    This code automatically uses the best available mode:
+    - Parallel (4 threads) if SharedArrayBuffer is available
+    - Single-threaded SIMD otherwise (works everywhere)
+
+    Both produce identical hashes!
+
+    WASM FILES NEEDED (parallel mode):
+      blake3-wasm-rayon/pkg/blake3_wasm_rayon.js
+      blake3-wasm-rayon/pkg/blake3_wasm_rayon_bg.wasm
+
+    WASM FILES NEEDED (single-threaded fallback):
+      blake3-wasm-single/pkg/blake3_wasm_single.js
+      blake3-wasm-single/pkg/blake3_wasm_single_bg.wasm
+    ============================================================
+  -->
+  <script type="module">
+    let blake3Hash = null;
+
+    // ============================================================
+    // STEP 1: Load WASM with automatic fallback
+    // ============================================================
+
+    async function init() {
+      const modeEl = document.getElementById('mode');
+      const fileInput = document.getElementById('file');
+
+      // Try parallel mode first
+      if (typeof SharedArrayBuffer !== 'undefined') {
+        try {
+          const module = await import('./blake3-wasm-rayon/pkg/blake3_wasm_rayon.js');
+          const wasmResponse = await fetch('./blake3-wasm-rayon/pkg/blake3_wasm_rayon_bg.wasm');
+          const wasmBytes = await wasmResponse.arrayBuffer();
+          const wasmModule = await WebAssembly.compile(wasmBytes);
+          await module.default({ module_or_path: wasmModule });
+          await module.initThreadPool(4);
+
+          blake3Hash = (data) => module.hash(data);
+          modeEl.textContent = 'Mode: Parallel (4 threads)';
+          modeEl.style.color = 'green';
+          fileInput.disabled = false;
+          console.log('BLAKE3 ready (parallel)');
+          return;
+        } catch (err) {
+          console.log('Parallel failed:', err.message);
+        }
+      }
+
+      // Fall back to single-threaded
+      try {
+        const module = await import('./blake3-wasm-single/pkg/blake3_wasm_single.js');
+        const wasmResponse = await fetch('./blake3-wasm-single/pkg/blake3_wasm_single_bg.wasm');
+        const wasmBytes = await wasmResponse.arrayBuffer();
+        const wasmModule = await WebAssembly.compile(wasmBytes);
+        await module.default(wasmModule);
+
+        blake3Hash = (data) => module.hash(data);
+        modeEl.textContent = 'Mode: Single-threaded';
+        modeEl.style.color = 'orange';
+        fileInput.disabled = false;
+        console.log('BLAKE3 ready (single-threaded)');
+      } catch (err) {
+        modeEl.textContent = 'Failed: ' + err.message;
+        modeEl.style.color = 'red';
+      }
+    }
+
+    // ============================================================
+    // STEP 2: Hash files
+    // ============================================================
+
+    document.getElementById('file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file || !blake3Hash) return;
+
+      // Read file as bytes
+      const data = new Uint8Array(await file.arrayBuffer());
+
+      // Hash with BLAKE3
+      const start = performance.now();
+      const hash = blake3Hash(data);
+      const elapsed = performance.now() - start;
+
+      // Convert to hex
+      const hex = Array.from(hash).map(b => b.toString(16).padStart(2, '0')).join('');
+
+      // Display result
+      const sizeMB = file.size / 1024 / 1024;
+      const speed = sizeMB / (elapsed / 1000);
+
+      document.getElementById('output').textContent =
+        `File: ${file.name}\n` +
+        `Size: ${sizeMB.toFixed(2)} MB\n` +
+        `Hash: ${hex}\n` +
+        `Time: ${elapsed.toFixed(2)} ms\n` +
+        `Speed: ${speed.toFixed(0)} MB/s`;
+    });
+
+    // Initialize
+    init();
+  </script>
+</body>
+</html>

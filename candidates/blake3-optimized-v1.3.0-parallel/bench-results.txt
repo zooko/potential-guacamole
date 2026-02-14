@@ -1,0 +1,25 @@
+BLAKE3 Optimized v1.3.0 (Parallel) - Benchmark Suite
+=====================================================
+
+Warming up...
+Initializing Blake3Parallel with 15 workers...
+Parallel hasher initialized successfully
+
+Throughput Benchmark:
+──────────────────────────────────────────────────
+64 bytes                26.50 MB/s      434234 ops/sec
+256 bytes               96.57 MB/s      395570 ops/sec
+1 KB                   244.95 MB/s      250824 ops/sec
+4 KB                   566.97 MB/s      145144 ops/sec
+16 KB                  728.33 MB/s       46613 ops/sec
+64 KB                  708.02 MB/s       11328 ops/sec
+256 KB                 449.97 MB/s        1800 ops/sec
+1 MB                   647.76 MB/s         648 ops/sec
+
+──────────────────────────────────────────────────
+Mode: Parallel (worker_threads + SIMD)
+
+Hardware: Intel Core i9-9900K @ 3.60GHz
+Node.js: v24.11.0
+OS: Windows
+Workers: 15

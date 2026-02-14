@@ -1,0 +1,19 @@
+[package]
+name = "blake3_wasm_rayon"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+rayon = "1.8"
+wasm-bindgen-rayon = "1.3"
+blake3 = { version = "1", features = ["rayon", "wasm32_simd"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+panic = "abort"
